@@ -12,7 +12,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <meta name="description" content="Familjeägt fastighetsbolag i Skövde. Lediga lägenheter via HomeQ. Kontakt och felanmälan." />
     <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://widgets.homeq.se/widgets/overview.css"/>
     <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+  
+    <link rel="stylesheet" href="https://widgets.homeq.se/widgets/overview.css" />
+
   </head>
   <body class="is-preload">
 
@@ -37,24 +41,65 @@
         <li style="list-style: none; width: 20ch; text-align: center;"><a href="#om">Om oss</a></li>
         <li style="list-style: none; width: 20ch; text-align: center;"><a href="#kontakt">Kontakt</a></li>
         <li style="list-style: none; width: 20ch; text-align: center;"><a href="#dokument">Dokument</a></li>
-
       </ul>
     </nav>
   </header>
 
+  
+<!-- Main (artiklar öppnas som overlays) -->
+<div id="main">
+
+  <!-- Lediga -->
+  <article id="lediga">
+    <h2 class="major">Lediga lägenheter</h2>
+    <p>Här visas våra publicerade annonser direkt från HomeQ. Klicka på en annons för att läsa mer och ansöka.</p>
+
+    <!-- HomeQ widget anchor -->
+    <div id="homeq-anchor" data-company="2390"></div>
+
+    <!-- Fallback-länk om widgeten inte laddar -->
+    <noscript>
+      <p>
+        <a class="button primary" href="https://www.homeq.se/p/eriksson--soner-fastigheter" target="_blank" rel="noopener">
+          Se lediga på HomeQ
+        </a>
+      </p>
+    </noscript>
+  </article>
+
+  <script>
+  // 0.00 = helt transparent, 0.40 = lätt tonad
+  const PANEL_ALPHA = 0.00;  // ändra t.ex. till 0.35 om du vill ha svag mörk ton
+
+  function restyleHomeQ() {
+    const root = document.querySelector('#homeq-anchor');
+    if (!root) return;
+
+    // Paneler/”papper” i filterblocket
+    const panels = root.querySelectorAll(
+      '[class*="MuiPaper-root"], [class*="Paper-root"], [class*="MuiCard-root"], .homeq-filters, .homeq-toolbar'
+    );
+
+    panels.forEach(el => {
+      el.style.backgroundColor = `rgba(27,31,34,${PANEL_ALPHA})`; // byt 27,31,34 till 0,0,0 om du vill ha neutral
+      el.style.boxShadow      = 'none';
+      el.style.border         = PANEL_ALPHA > 0 ? '1px solid rgba(255,255,255,0.15)' : 'none';
+    });
+  }
+
+  // Kör direkt och varje gång widgeten uppdateras
+  const anchor = document.getElementById('homeq-anchor');
+  if (anchor) {
+    restyleHomeQ();
+    const mo = new MutationObserver(restyleHomeQ);
+    mo.observe(anchor, { childList: true, subtree: true });
+  }
+
+  // Kör igen efter att HomeQ-widgeten hunnit ladda in sin DOM
+  window.addEventListener('load', () => setTimeout(restyleHomeQ, 800));
+</script>
 
 
-      <!-- Main (artiklar öppnas som overlays) -->
-      <div id="main">
-
-        <!-- Lediga -->
-        <article id="lediga">
-          <h2 class="major">Lediga lägenheter</h2>
-          <p>Vi publicerar alla våra lediga lägenheter via HomeQ.</p>
-          <ul class="actions">
-            <li><a href="https://www.homeq.se/p/eriksson--soner-fastigheter" target="_blank" rel="noopener" class="button primary">Till HomeQ</a></li>
-          </ul>
-        </article>
 
 <!-- Felanmälan -->
 <article id="fel">
@@ -82,23 +127,16 @@
     <ul class="actions">
       <li><input type="submit" value="Skicka felanmälan" class="primary" /></li>
     </ul>
-    <!-- valfria Formspree-fält -->
     <input type="hidden" name="_subject" value="Felanmälan – Eriksson & Söner" />
     <input type="hidden" name="_template" value="table" />
-    <!-- Byt gärna till en egen tack-sida när ni har den -->
-    <!-- <input type="hidden" name="_redirect" value="https://erikssonsoner.com/tack" /> -->
   </form>
 </article>
-
-
 
 <!-- Om oss -->
 <article id="om">
   <h2 class="major">Om oss</h2>
-  <p>Eriksson & Söner Fastigheter AB är ett familjeägt bolag grundat april 2020 av bröderna Joseph-, Emmanuel- och Jonathan Eriksson, med rötterna i Skövde. Vi förvärvar, utvecklar och förvaltar hyresfastigheter med fokus på trygghet, närhet och långsiktighet. 
-	Våra fastigheter finns främst i Tidan- och Väringområdet, där vi arbetar nära våra hyresgäster för att skapa trivsamma boendemiljöer. Som lokalt engagerade fastighetsägare är vi stolta över att bidra till Skövdes utveckling och trivsel.</p>
-  <p>Från och med 1 juli 2025 har vi blivit delägare i flera fastigheter i Tidan och Väring: Götgatan 2‑6, Slingvägen 5A‑C, Stationsvägen 2 samt Parkvägen 4‑6 i Tidan, och Nyponvägen 2‑6 i Väring. 
-	Vi sköter framöver fastighetsförvaltningen och uthyrningen.</p>
+  <p>Eriksson & Söner Fastigheter AB är ett familjeägt bolag grundat april 2020 av bröderna Joseph-, Emmanuel- och Jonathan Eriksson, med rötterna i Skövde. Vi förvärvar, utvecklar och förvaltar hyresfastigheter med fokus på trygghet, närhet och långsiktighet. Våra fastigheter finns främst i Tidan- och Väringområdet, där vi arbetar nära våra hyresgäster för att skapa trivsamma boendemiljöer. Som lokalt engagerade fastighetsägare är vi stolta över att bidra till Skövdes utveckling och trivsel.</p>
+  <p>Från och med 1 juli 2025 har vi blivit delägare i flera fastigheter i Tidan och Väring: Götgatan 2‑6, Slingvägen 5A‑C, Stationsvägen 2 samt Parkvägen 4‑6 i Tidan, och Nyponvägen 2‑6 i Väring. Vi sköter framöver fastighetsförvaltningen och uthyrningen.</p>
 </article>
 
 <!-- Kontakt -->
@@ -122,7 +160,6 @@
       <span class="icon solid fa-map-marker-alt"></span>
       <strong>Postadress:</strong> Skövdevägen 44, 541 93 Skövde
     </div>
-</p></p></p></p>
   </div>
   <p>För felanmälan, använd gärna formuläret under <a href="#fel">Felanmälan</a> för snabbast hantering.</p>
 </article>
@@ -139,7 +176,6 @@
     gap: 0.5rem;
   }
 </style>
-
 
 <!-- Dokument hyresgäster -->
 <article id="dokument">
@@ -160,25 +196,28 @@
   </ul>
 </article>
 
+</div>
 
-      </div>
+<!-- Footer -->
+<footer id="footer">
+  <p class="copyright">&copy; Eriksson & Söner Fastigheter AB</p>
+</footer>
 
-      <!-- Footer -->
-      <footer id="footer">
-        <p class="copyright">&copy; Eriksson & Söner Fastigheter AB</p>
-      </footer>
+</div>
 
-    </div>
+<!-- BG -->
+<div id="bg"></div>
 
-    <!-- BG -->
-    <div id="bg"></div>
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+<script type="application/javascript" src="https://widgets.homeq.se/widgets/overview.js"></script>
 
-    <!-- Scripts -->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/browser.min.js"></script>
-    <script src="assets/js/breakpoints.min.js"></script>
-    <script src="assets/js/util.js"></script>
-    <script src="assets/js/main.js"></script>
 
-  </body>
+
+
+</body>
 </html>
